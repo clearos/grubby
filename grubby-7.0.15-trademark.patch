@@ -1,0 +1,15 @@
+diff -rup grubby-7.0.15/new-kernel-pkg grubby-7.0.15-trademark/new-kernel-pkg
+--- grubby-7.0.15/new-kernel-pkg	2010-04-14 17:22:02.000000000 -0400
++++ grubby-7.0.15-trademark/new-kernel-pkg	2011-04-01 11:18:04.724424741 -0400
+@@ -151,10 +151,8 @@ install() {
+ 
+ 	if [ -n "$banner" ]; then
+             title="$banner ($version)"
+-	elif [ -f /etc/redhat-release ]; then
+-	    title="$(sed 's/ release.*$//' < /etc/redhat-release) ($version)"
+ 	else
+-	    title="Red Hat Linux ($version)"
++	    title="Linux ($version)"
+ 	fi
+ 	$grubby --add-kernel=$bootPrefix/$kernelName-$version \
+ 	    $INITRD --copy-default $makedefault --title "$title" \

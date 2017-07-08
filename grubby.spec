@@ -1,6 +1,6 @@
 Name: grubby
 Version: 7.0.15
-Release: 7%{?dist}
+Release: 3%{?dist}
 Summary: Command line tool for updating bootloader configs
 Group: System Environment/Base
 License: GPLv2+
@@ -11,7 +11,7 @@ URL: http://git.fedorahosted.org/git/grubby.git
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pkgconfig glib2-devel popt-devel 
-BuildRequires: libblkid-devel git
+BuildRequires: libblkid-devel
 %ifarch s390 s390x
 Requires: s390utils-base
 %endif
@@ -19,10 +19,8 @@ Requires: s390utils-base
 Patch0: 0001-Add-check-for-return-value-of-getuuidbydev-592294.patch
 Patch1: 0001-Allow-args-changes-to-affect-all-kernel-entries-6969.patch
 Patch2: 0002-Add-test-for-updating-an-existing-arg-on-ALL-kernels.patch
-Patch3: 0001-Read-HYPERVISOR-and-HYPERVISOR_ARGS-from-etc-sysconf.patch
-Patch4: grubby-7.0.15-update-mbmodule-initrd-999908.patch
-Patch5: 0001-Include-multiboot-module-parameters-in-info-997934.patch
-Patch6: 0001-grubby-fix-initrd-updating-when-multiboot-exist.patch
+
+Patch100: grubby-7.0.15-trademark.patch
 
 %description
 grubby  is  a command line tool for updating and displaying information about 
@@ -33,12 +31,10 @@ environment.
 
 %prep
 %setup -q
-git init
-git config user.email "noone@example.com"
-git config user.name "no one"
-git add .
-git commit -a -q -m "%{version} baseline"
-git am %{patches} </dev/null
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch100 -p1
 
 %build
 make %{?_smp_mflags}
@@ -65,21 +61,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thu Jul 24 2014 Peter Jones <pjones@redhat.com> - 7.0.15-7
-- fix initrd updating when multiboot exist
-  Resolves: rhbz#1098846
-
-* Thu Jun 19 2014 Peter Jones <pjones@redhat.com> - 7.0.15-6
-- Include multiboot module parameters in --info
-  Resolves: rhbz#997934
-
-* Thu Sep 12 2013 Peter Jones <pjones@redhat.com> - 7.0.15-5
-- When we're using a multiboot image, add the initrd as a multiboot module.
-  Resolves: rhbz#999908
-
-* Fri Aug  2 2013 David Shea <dshea@redhat.com> - 7.0.15-4
-- Read HYPERVISOR and HYPERVISOR_ARGS from /etc/sysconfig/kernel
-  Resolves: rhbz#991197
+* Thu Jun 21 2012 ClearFoundation <developer@clearfoundation.com> - 7.0.15-3.clear
+- Apply trademark patch
 
 * Wed Feb 29 2012 Peter Jones <pjones@redhat.com> - 7.0.15-3
 - Ensure that all stanzas are fixed with --update-kernel=ALL (patch from bcl)
